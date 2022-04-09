@@ -1,31 +1,20 @@
 /** @format */
 
 import React, { useState } from "react";
+import "bootstrap/dist/css/bootstrap.min.css";
+import Login from "./components/Login";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import AdminLayout from "./screens/adminScreen";
-import Login from "./screens/loginScreen";
+import Register from "./components/Register";
+import { UserLogout } from "./services/auth.service";
+import Admin from "./components/Admin";
 const App = () => {
-  const [token, setToken] = useState();
-  if (!token) {
-    return <Login setToken={setToken} />;
-  }
-
   return (
-    <div className="wrapper">
-      <AdminLayout />
-      {/* <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<App />} />
-          <Route path="admin" element={<AdminScreen />} />
-          <Route path="user" element={<UserScreen />} />
-          <Route
-            index // <-- "/"
-            element={<div>Default Page Content</div>}
-          />
-        </Routes>
-      </BrowserRouter> */}
+    <div>
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+      </Routes>
     </div>
   );
 };
-
 export default App;
