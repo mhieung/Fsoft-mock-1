@@ -7,14 +7,13 @@ import { login } from "../actions/auth";
 import { useNavigate } from "react-router-dom";
 const Login = () => {
   const navigate = useNavigate();
-  const routeChange = () => {
+  const routeChangeRegister = () => {
     let path = `/register`;
     navigate(path);
   };
   const [username, setUsername] = useState(" ");
   const [password, setPassword] = useState(" ");
   const dispatch = useDispatch();
-
   const onChangeUsername = (e) => {
     const username = e.target.value;
     setUsername(username);
@@ -23,10 +22,13 @@ const Login = () => {
     const password = e.target.value;
     setPassword(password);
   };
+
   const handleLogin = (e) => {
     e.preventDefault();
     dispatch(login(username, password));
+    navigate("/");
   };
+
   return (
     <div>
       <Form
@@ -89,12 +91,12 @@ const Login = () => {
           <Button type="primary" htmlType="submit" onClick={handleLogin}>
             Submit
           </Button>
-          <Button type="link" htmlType="button" onClick={routeChange}>
+          <Button type="link" htmlType="button" onClick={routeChangeRegister}>
             Register
           </Button>
         </Form.Item>
       </Form>
     </div>
   );
-};
+};;;;;;;
 export default Login;
