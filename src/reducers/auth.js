@@ -1,5 +1,6 @@
 /** @format */
 
+import { login } from "../actions/auth";
 import {
   REGISTER_SUCCESS,
   REGISTER_FAIL,
@@ -25,6 +26,8 @@ export default function (state = initialState, action) {
         isLoggedIn: false,
       };
     case LOGIN_SUCCESS:
+      console.log(payload);
+
       return {
         ...state,
         isLoggedIn: true,

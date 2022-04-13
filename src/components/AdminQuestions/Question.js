@@ -1,39 +1,9 @@
 /** @format */
-import { Button, Form, Input, Modal } from "antd";
-import { adminGetQuestions } from "../services/question.service";
-import { GET_QUESTION_SUCCESS, GET_QUESTION_FAIL, SET_MESSAGE } from "./types";
-export const getQuestionList = async (dispatch) => {
-  await adminGetQuestions().then(
-    (response) => {
-      dispatch({
-        type: GET_QUESTION_SUCCESS,
-      });
-      dispatch({
-        type: SET_MESSAGE,
-        payload: response.data.message,
-      });
-      return Promise.resolve();
-    },
-    (error) => {
-      const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString();
-      dispatch({
-        type: GET_QUESTION_FAIL,
-      });
-      dispatch({
-        type: SET_MESSAGE,
-        payload: message,
-      });
-      return Promise.reject();
-    }
-  );
-};
 
-export const AddEditQuestion = (props) => {
+import { Button, Form, Input, Modal } from "antd";
+import React from "react";
+
+export default function AddEditQuestion(props) {
   const {
     isVisible,
     onCancel,
@@ -59,7 +29,7 @@ export const AddEditQuestion = (props) => {
       footer={""}
     >
       {dataQuestion ? (
-        // field for edit question
+        //  edit question
         <Form
           name="basic"
           wrapperCol={{
@@ -166,7 +136,7 @@ export const AddEditQuestion = (props) => {
           </Form.Item>
         </Form>
       ) : (
-        // field for add question
+        //  add question
         <Form
           name="basic"
           wrapperCol={{
@@ -275,4 +245,4 @@ export const AddEditQuestion = (props) => {
       )}
     </Modal>
   );
-};
+}

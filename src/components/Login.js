@@ -5,6 +5,8 @@ import { useDispatch } from "react-redux";
 import { Form, Input, Button, Checkbox } from "antd";
 import { login } from "../actions/auth";
 import { useNavigate } from "react-router-dom";
+import { LOGIN_SUCCESS } from "../actions/types";
+
 const Login = () => {
   const navigate = useNavigate();
   const routeChangeRegister = () => {
@@ -25,8 +27,20 @@ const Login = () => {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    dispatch(login(username, password));
-    navigate("/");
+    // dispatch(login(username, password))
+
+    const result = login(username, password).then((value) => {
+      setTimeout(() => {
+        navigate("/");
+      }, 500);
+    });
+
+    // dispatch({
+    //   type: LOGIN_SUCCESS,
+    //   payload: result,
+
+    //   // login(username, password)
+    // });
   };
 
   return (

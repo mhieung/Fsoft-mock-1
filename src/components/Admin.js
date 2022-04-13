@@ -2,31 +2,29 @@
 
 import React, { useEffect, useState } from "react";
 import { Layout, Menu, Breadcrumb } from "antd";
+import { Link } from "react-router-dom";
 import {
   UserOutlined,
   QuestionCircleOutlined,
   SettingOutlined,
 } from "@ant-design/icons";
 import { useDispatch } from "react-redux";
-import { adminGetQuestionById } from "../services/question.service";
+import QuestionsList from "./AdminQuestions/QuestionsList";
+
 function Admin() {
   // const { SubMenu } = Menu;
   const { Header, Content, Sider } = Layout;
-  const [isModalAddEditVisible, setIsModalAddEditVisible] = useState(false);
-  const [isDataChange, setIsDataChange] = useState(false);
-  const handleAddEditCancel = () => {
-    setIsModalAddEditVisible(false);
-  };
 
   const dispatch = useDispatch();
-  const handleAddQuestion = async (values) => {
-    try {
-      await adminGetQuestionById(values);
-      setIsDataChange(!isDataChange);
-      setIsModalAddEditVisible(false);
-    } catch (error) {
-      console.log("failed: ", error);
-    }
+  const [content, setContent] = useState();
+  const onClickProfile = () => {
+    setContent(<h1>profile</h1>);
+  };
+  const onClickUsersList = () => {
+    setContent(<h1>users list</h1>);
+  };
+  const onClickQuestionsList = () => {
+    setContent(<QuestionsList />);
   };
   return (
     <div>
@@ -47,18 +45,31 @@ function Admin() {
               defaultOpenKeys={["account"]}
               style={{ height: "100%", borderRight: 0 }}
             >
-              <Menu.Item key="1" icon={<SettingOutlined />}>
-                Profile
+              <Menu.Item
+                key="1"
+                icon={<SettingOutlined />}
+                onClick={onClickProfile}
+              >
+                <Link to="/admin "> Profile</Link>
               </Menu.Item>
-              <Menu.Item key="2" icon={<UserOutlined />}>
-                Users List
+              <Menu.Item
+                key="2"
+                icon={<UserOutlined />}
+                onClick={onClickUsersList}
+              >
+                <Link to="/admin "> Users List</Link>
               </Menu.Item>
-              <Menu.Item key="3" icon={<QuestionCircleOutlined />}>
-                Questions List
+              <Menu.Item
+                key="3"
+                icon={<QuestionCircleOutlined />}
+                onClick={onClickQuestionsList}
+              >
+                <Link to="/admin/questionsList "> Questions List</Link>
               </Menu.Item>
             </Menu>
           </Sider>
           <Layout style={{ padding: "0 24px 24px" }}>
+            {content}
             {/* <Breadcrumb style={{ margin: "16px 0" }}>
               <Breadcrumb.Item>Home</Breadcrumb.Item>
               <Breadcrumb.Item>List</Breadcrumb.Item>
