@@ -1,36 +1,64 @@
 /** @format */
 
 import React, { useEffect, useState } from "react";
-import { Layout, Menu, Breadcrumb } from "antd";
-import { Link } from "react-router-dom";
+import { Layout, Menu, Breadcrumb, Button } from "antd";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import {
   UserOutlined,
   QuestionCircleOutlined,
   SettingOutlined,
 } from "@ant-design/icons";
 import { useDispatch } from "react-redux";
-import QuestionsList from "./AdminQuestions/QuestionsList";
+import QuestionsList from "./AdminManageQuestions/QuestionsList";
+import { UserLogout } from "../services/auth.service";
+import { USER_LOGOUT } from "../constants/userConstants";
+import UsersList from "./AdminManageUsers/UsersList";
+import AdminProfile from "./AdminProfile/Profile";
 
 function Admin() {
   // const { SubMenu } = Menu;
   const { Header, Content, Sider } = Layout;
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [content, setContent] = useState();
   const onClickProfile = () => {
-    setContent(<h1>profile</h1>);
+    setContent(<AdminProfile />);
   };
   const onClickUsersList = () => {
-    setContent(<h1>users list</h1>);
+    setContent(<UsersList />);
   };
   const onClickQuestionsList = () => {
     setContent(<QuestionsList />);
+  };
+  const onClickLogOut = async (e) => {
+    e.preventDefault();
+    try {
+      const refresh = localStorage.getItem("refresh");
+      const data = {
+        refreshToken: refresh,
+      };
+      const response = await UserLogout(data);
+      dispatch({
+        type: USER_LOGOUT,
+        payload: response,
+      });
+      localStorage.clear();
+      navigate("/login");
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <div>
       <Layout>
         <Header className="header">
           <div className="logo" />
+          <div style={{ float: "right" }}>
+            <Button type="primary" htmlType="submit" onClick={onClickLogOut}>
+              Logout
+            </Button>
+          </div>
           {/* <Menu theme="dark" mode="horizontal" defaultSelectedKeys={["2"]}>
             <Menu.Item key="1">nav 1</Menu.Item>
             <Menu.Item key="2">nav 2</Menu.Item>
@@ -50,14 +78,14 @@ function Admin() {
                 icon={<SettingOutlined />}
                 onClick={onClickProfile}
               >
-                <Link to="/admin "> Profile</Link>
+                <Link to="/admin/adminProfile "> Profile</Link>
               </Menu.Item>
               <Menu.Item
                 key="2"
                 icon={<UserOutlined />}
                 onClick={onClickUsersList}
               >
-                <Link to="/admin "> Users List</Link>
+                <Link to="/admin/usersList "> Users List</Link>
               </Menu.Item>
               <Menu.Item
                 key="3"

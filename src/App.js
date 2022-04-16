@@ -7,15 +7,13 @@ import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import Register from "./components/Register";
 
 import Admin from "./components/Admin";
-import QuestionsList from "./components/AdminQuestions/QuestionsList";
+import QuestionsList from "./components/AdminManageQuestions/QuestionsList";
+import User from "./components/User";
+import AdminProfile from "./components/AdminProfile/Profile";
+import UsersList from "./components/AdminManageUsers/UsersList";
 
 const App = () => {
-  const [role, setRole] = useState("");
-
-  useEffect(() => {
-    console.log(1);
-    setRole(localStorage.getItem("role"));
-  }, [role]);
+  const role = localStorage.getItem("role");
   return (
     <div>
       <BrowserRouter>
@@ -30,11 +28,14 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/admin" element={<Admin />}>
+            <Route path="adminProfile" element={<AdminProfile />} />
+            <Route path="usersList" element={<UsersList />} />
             <Route path="questionsList" element={<QuestionsList />} />
           </Route>
+          <Route path="/user" element={<User />} />
         </Routes>
       </BrowserRouter>
     </div>
   );
-};;
+};;;
 export default App;

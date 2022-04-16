@@ -10,18 +10,15 @@ export const UserLogin = (username, password) => {
     password: password,
   });
 };
-export const UserRegister = (payload) => {
-  // const data = {
-  //   username: username,
-  //   password: password,
-  //   email: email,
-  // };
-  return axiosService.post(API_URL + "/v1/auth/register", payload);
+export const UserRegister = (username, password, email) => {
+  return axiosService.post(API_URL + "/v1/auth/register", {
+    username: username,
+    password: password,
+    email: email,
+  });
 };
 export const UserLogout = (payload) => {
   return axiosService.post(API_URL + "/v1/auth/logout", payload);
-  // localStorage.removeItem("user");
-  // localStorage.removeItem("tokens");
 };
 export const RefreshToken = (payload) => {
   return axiosService.post(API_URL + "/v1/auth/refresh-tokens", payload);

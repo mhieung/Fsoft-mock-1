@@ -2,11 +2,11 @@
 
 import { combineReducers } from "redux";
 import auth from "./auth";
-import message from "./message";
+import admin from "./admin";
 
 const rootReducer = combineReducers({
   auth,
-  message,
+  admin,
 });
 
 export default rootReducer;
