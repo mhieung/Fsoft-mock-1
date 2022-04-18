@@ -9,8 +9,8 @@ import Register from "./components/Register";
 import Admin from "./components/Admin";
 import QuestionsList from "./components/AdminManageQuestions/QuestionsList";
 import User from "./components/User";
-import AdminProfile from "./components/AdminProfile/Profile";
 import UsersList from "./components/AdminManageUsers/UsersList";
+import QandA from "./components/UserQandA/QandA";
 
 const App = () => {
   const role = localStorage.getItem("role");
@@ -28,11 +28,12 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/admin" element={<Admin />}>
-            <Route path="adminProfile" element={<AdminProfile />} />
             <Route path="usersList" element={<UsersList />} />
             <Route path="questionsList" element={<QuestionsList />} />
           </Route>
-          <Route path="/user" element={<User />} />
+          <Route path="/user" element={<User />}>
+            <Route path="questions" element={<QandA />} />
+          </Route>
         </Routes>
       </BrowserRouter>
     </div>

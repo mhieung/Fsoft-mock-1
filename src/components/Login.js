@@ -49,7 +49,7 @@ const Login = () => {
       if (userInfo.role === "admin") {
         navigate("/admin");
       } else {
-        navigate("/");
+        navigate("/user");
       }
     } catch (error) {
       dispatch({

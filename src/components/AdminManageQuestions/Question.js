@@ -4,120 +4,105 @@ import { Button, Input, Modal, Form, Space } from "antd";
 import React from "react";
 
 export const CreateQuestion = (props) => {
-  const {
-    isVisible,
-    onCancel,
-    onOk,
-    handleClickedCreate,
-    handleCreateQuestion,
-  } = props;
+  const { handleCreateQuestion } = props;
   return (
-    <div>
-      <Button type="primary" onClick={handleClickedCreate}>
-        Create Question
-      </Button>
+    <Space direction="vertical">
+      <Form
+        name="basic"
+        wrapperCol={{
+          span: 24,
+        }}
+        autoComplete="off"
+        onFinish={handleCreateQuestion}
+      >
+        <Form.Item
+          labelCol={12}
+          name="question"
+          rules={[
+            {
+              required: true,
+              message: "required!",
+            },
+          ]}
+        >
+          <Input addonBefore="Question" placeholder="Create a new question!" />
+        </Form.Item>
 
-      <Modal visible={isVisible} onCancel={onCancel} onOk={onOk}>
-        <Space direction="vertical">
-          <Form
-            name="basic"
-            wrapperCol={{
-              span: 24,
-            }}
-            autoComplete="off"
-            onFinish={handleCreateQuestion}
-          >
-            <Form.Item
-              labelCol={12}
-              name="question"
-              rules={[
-                {
-                  required: true,
-                  message: "required!",
-                },
-              ]}
-            >
-              <Input addonBefore="Question" placeholder="Enter a question" />
-            </Form.Item>
+        <Form.Item
+          name="answer1"
+          rules={[
+            {
+              required: true,
+              message: "required!",
+            },
+          ]}
+        >
+          <Input addonBefore="Answer 1" placeholder="Enter answer 1" />
+        </Form.Item>
 
-            <Form.Item
-              name="answer1"
-              rules={[
-                {
-                  required: true,
-                  message: "required!",
-                },
-              ]}
-            >
-              <Input addonBefore="Answer 1" placeholder="Enter answer 1" />
-            </Form.Item>
+        <Form.Item
+          name="answer2"
+          rules={[
+            {
+              required: true,
+              message: "required!",
+            },
+          ]}
+        >
+          <Input addonBefore="Answer 2" placeholder="Enter answer 2" />
+        </Form.Item>
 
-            <Form.Item
-              name="answer2"
-              rules={[
-                {
-                  required: true,
-                  message: "required!",
-                },
-              ]}
-            >
-              <Input addonBefore="Answer 2" placeholder="Enter answer 2" />
-            </Form.Item>
+        <Form.Item
+          name="answer3"
+          rules={[
+            {
+              required: true,
+              message: "required!",
+            },
+          ]}
+        >
+          <Input addonBefore="Answer 3" placeholder="Enter answer 3" />
+        </Form.Item>
 
-            <Form.Item
-              name="answer3"
-              rules={[
-                {
-                  required: true,
-                  message: "required!",
-                },
-              ]}
-            >
-              <Input addonBefore="Answer 3" placeholder="Enter answer 3" />
-            </Form.Item>
+        <Form.Item
+          name="answer4"
+          rules={[
+            {
+              required: true,
+              message: "required!",
+            },
+          ]}
+        >
+          <Input addonBefore="Answer 4" placeholder="Enter answer 4" />
+        </Form.Item>
 
-            <Form.Item
-              name="answer4"
-              rules={[
-                {
-                  required: true,
-                  message: "required!",
-                },
-              ]}
-            >
-              <Input addonBefore="Answer 4" placeholder="Enter answer 4" />
-            </Form.Item>
+        <Form.Item
+          name="correctanswer"
+          rules={[
+            {
+              required: true,
+              message: "required!",
+            },
+          ]}
+        >
+          <Input
+            addonBefore="Correct answer "
+            placeholder="Correct answer is"
+          />
+        </Form.Item>
 
-            <Form.Item
-              name="correctanswer"
-              rules={[
-                {
-                  required: true,
-                  message: "required!",
-                },
-              ]}
-            >
-              <Input
-                addonBefore="Correct answer "
-                placeholder="Enter Correct answer"
-              />
-            </Form.Item>
-
-            <Form.Item wrapperCol={{ offset: 0, span: 16 }}>
-              <Button type="primary" htmlType="submit">
-                Save
-              </Button>
-            </Form.Item>
-          </Form>
-        </Space>
-      </Modal>
-    </div>
+        <Form.Item wrapperCol={{ offset: 0, span: 16 }}>
+          <Button type="primary" htmlType="submit">
+            Create
+          </Button>
+        </Form.Item>
+      </Form>
+    </Space>
   );
 };
 export const UpdateQuestionById = (props) => {
   const {
     questionId,
-
     questionById,
     handleClickInspect,
     isVisible,

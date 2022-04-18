@@ -1,7 +1,7 @@
 /** @format */
 import React, { useEffect, useState } from "react";
-import { Table, Space, Col, Pagination } from "antd";
-import { useDispatch, useSelector } from "react-redux";
+import { Table, Space, Pagination } from "antd";
+import { useDispatch } from "react-redux";
 import { GET_QUESTION_FAIL, GET_QUESTION_SUCCESS } from "../../actions/types";
 import {
   adminCreateQuestion,
@@ -15,12 +15,10 @@ import {
   DeleteQuestionById,
   UpdateQuestionById,
 } from "./Question";
-import { getQueriesForElement } from "@testing-library/react";
 
 export default function QuestionsList(props) {
   const dispatch = useDispatch();
   const { Column, ColumnGroup } = Table;
-  // const listQuestions = useSelector((state) => state.admin.current.results);
   const [questionsList, setQuestionsList] = useState([]);
   const [pagination, setPagination] = useState({
     page: null,
@@ -46,9 +44,7 @@ export default function QuestionsList(props) {
     setIsVisible(true);
     setClickedInspect(questionId);
   };
-  const handleClickedCreate = () => {
-    setIsVisible(true);
-  };
+
   // get questions list
   useEffect(() => {
     const fetchQuestionsList = async () => {
@@ -69,11 +65,11 @@ export default function QuestionsList(props) {
           payload: response,
         });
       } catch (error) {
-        console.log(error);
         dispatch({
           type: GET_QUESTION_FAIL,
           payload: error,
         });
+        console.log(error);
       }
     }; //call api roi dispatch
     fetchQuestionsList();
@@ -110,7 +106,6 @@ export default function QuestionsList(props) {
     try {
       await adminCreateQuestion(values);
       setIsDataChange(!isDataChange);
-      setIsVisible(false);
     } catch (error) {
       console.log(error);
     }
@@ -156,25 +151,25 @@ export default function QuestionsList(props) {
   };
   return (
     <div>
-      <CreateQuestion
-        isVisible={isVisible}
-        onOk={onOk}
-        onCancel={onCancel}
-        handleClickedCreate={handleClickedCreate}
-        handleCreateQuestion={handleCreateQuestion}
-      />
-      <Table dataSource={questionsList}>
-        <Column title="Question" dataIndex="question" key="question" />
-        <ColumnGroup title="Answers">
-          <Column title="Answer 1" dataIndex="answer1" key="answer1" />
-          <Column title="Answer 2" dataIndex="answer2" key="answer2" />
-          <Column title="Answer 3" dataIndex="answer3" key="answer3" />
-          <Column title="Answer 4" dataIndex="answer4" key="answer4" />
-          <Column
-            title="Correct Answer"
-            dataIndex="correctanswer"
-            key="correctanswer"
-          />
+      <Space direction="horizontal">
+        <Space direction="vertical">
+          <h1>Add a new Question</h1>
+          <CreateQuestion handleCreateQuestion={handleCreateQuestion} />
+        </Space>
+
+        <Table dataSource={questionsList}>
+          <Column title="Question" dataIndex="question" key="question" />
+          <ColumnGroup title="Answers">
+            <Column title="Answer 1" dataIndex="answer1" key="answer1" />
+            <Column title="Answer 2" dataIndex="answer2" key="answer2" />
+            <Column title="Answer 3" dataIndex="answer3" key="answer3" />
+            <Column title="Answer 4" dataIndex="answer4" key="answer4" />
+            <Column
+              title="Correct Answer"
+              dataIndex="correctanswer"
+              key="correctanswer"
+            />
+          </ColumnGroup>
           <Column
             title="Action"
             render={(record) => (
@@ -196,8 +191,8 @@ export default function QuestionsList(props) {
             )}
             key="id"
           />
-        </ColumnGroup>
-      </Table>
+        </Table>
+      </Space>
       <Pagination
         className="pagination"
         defaultCurrent={pagination.page}
