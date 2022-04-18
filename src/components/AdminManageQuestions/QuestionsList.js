@@ -1,23 +1,25 @@
 /** @format */
 import React, { useEffect, useState } from "react";
-import {
-  Button,
-  Input,
-  Modal,
-  Select,
-  Table,
-  Space,
-  Col,
-  Pagination,
-} from "antd";
+import { Table, Space, Col, Pagination } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { GET_QUESTION_FAIL, GET_QUESTION_SUCCESS } from "../../actions/types";
-import { adminGetQuestions } from "../../services/question.service";
-import { AddEditQuestion, QuestionBox } from "./Question";
+import {
+  adminCreateQuestion,
+  adminDeleteQuestion,
+  adminEditQuestion,
+  adminGetQuestionById,
+  adminGetQuestions,
+} from "../../services/question.service";
+import {
+  CreateQuestion,
+  DeleteQuestionById,
+  UpdateQuestionById,
+} from "./Question";
+import { getQueriesForElement } from "@testing-library/react";
 
 export default function QuestionsList(props) {
   const dispatch = useDispatch();
-
+  const { Column, ColumnGroup } = Table;
   // const listQuestions = useSelector((state) => state.admin.current.results);
   const [questionsList, setQuestionsList] = useState([]);
   const [pagination, setPagination] = useState({
@@ -26,36 +28,27 @@ export default function QuestionsList(props) {
     totalPages: null,
     totalResults: null,
   });
-  const [isModalAddEditVisible, setIsModalAddEditVisible] = useState(false);
-  const [isModalDeleteVisible, setIsModalDeleteVisible] = useState(false);
-  const [clickedAddEditId, setClickedAddEditId] = useState("");
-  const [clickedDeleteId, setClickedDeleteIdId] = useState("");
-  const [dataQuestion, setDataQuestion] = useState({});
-  const [isDataChange, setIsDataChange] = useState(false);
-  const dataSource = [...questionsList];
-  console.log(dataSource);
 
-  const handleAddEditCancel = () => {
-    setIsModalAddEditVisible(false);
+  const [clickedInspect, setClickedInspect] = useState("");
+  const [isDataChange, setIsDataChange] = useState(false);
+  const [questionById, setQuestionById] = useState({});
+  const [isVisible, setIsVisible] = useState(false);
+
+  const onCancel = () => {
+    setIsVisible(false);
+    setClickedInspect("");
   };
-  const handleDeleteCancel = () => {
-    setIsModalDeleteVisible(false);
+  const onOk = () => {
+    setIsVisible(false);
+    setClickedInspect("");
   };
-  const onClickEdit = (idQuestion) => {
-    setIsModalAddEditVisible(true);
-    setClickedAddEditId(idQuestion);
+  const handleClickInspect = (questionId) => {
+    setIsVisible(true);
+    setClickedInspect(questionId);
   };
-  const onClickDelete = (idQuestion) => {
-    setIsModalDeleteVisible(true);
-    setClickedDeleteIdId(idQuestion);
+  const handleClickedCreate = () => {
+    setIsVisible(true);
   };
-  const { Column, ColumnGroup } = Table;
-  const adminAction = [
-    {
-      updateAction: "update",
-      deleteAction: "delete",
-    },
-  ];
   // get questions list
   useEffect(() => {
     const fetchQuestionsList = async () => {
@@ -86,6 +79,53 @@ export default function QuestionsList(props) {
     fetchQuestionsList();
   }, [dispatch, isDataChange]);
 
+  // get question by id
+  useEffect(() => {
+    const getQuestionById = async () => {
+      try {
+        const response = await adminGetQuestionById(clickedInspect);
+        await setQuestionById(response);
+        // console.log(response);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getQuestionById();
+  }, [clickedInspect, isDataChange]);
+
+  //edit question
+  const handleEditQuestion = async (values) => {
+    try {
+      await adminEditQuestion(clickedInspect, values);
+      setIsVisible(false);
+      setClickedInspect("");
+      setIsDataChange(!isDataChange);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  //add question
+  const handleCreateQuestion = async (values) => {
+    try {
+      await adminCreateQuestion(values);
+      setIsDataChange(!isDataChange);
+      setIsVisible(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  //deleteQuestion
+  const handleDeleteQuestion = async (questionId) => {
+    try {
+      await adminDeleteQuestion(questionId);
+      setIsDataChange(!isDataChange);
+      setIsVisible(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   // change page
   const handlePaginationChange = (page) => {
     const params = {
@@ -116,8 +156,14 @@ export default function QuestionsList(props) {
   };
   return (
     <div>
+      <CreateQuestion
+        isVisible={isVisible}
+        onOk={onOk}
+        onCancel={onCancel}
+        handleClickedCreate={handleClickedCreate}
+        handleCreateQuestion={handleCreateQuestion}
+      />
       <Table dataSource={questionsList}>
-        {/* <QuestionBox questionsList={questionsList}  /> */}
         <Column title="Question" dataIndex="question" key="question" />
         <ColumnGroup title="Answers">
           <Column title="Answer 1" dataIndex="answer1" key="answer1" />
@@ -131,20 +177,34 @@ export default function QuestionsList(props) {
           />
           <Column
             title="Action"
-            // dataIndex="id"
-            render={(id) => <QuestionBox idQuestion={id} />}
+            render={(record) => (
+              <Space direction="horizontal">
+                <UpdateQuestionById
+                  isVisible={isVisible}
+                  questionId={record.id}
+                  questionById={questionById}
+                  handleClickInspect={handleClickInspect}
+                  onOk={onOk}
+                  onCancel={onCancel}
+                  handleEditQuestion={handleEditQuestion}
+                />
+                <DeleteQuestionById
+                  handleDeleteQuestion={handleDeleteQuestion}
+                  questionId={record.id}
+                />
+              </Space>
+            )}
             key="id"
           />
         </ColumnGroup>
       </Table>
-
-      {/* <Pagination
-          className="pagination"
-          defaultCurrent={pagination.page}
-          total={pagination.totalResults}
-          hideOnSinglePage
-          onChange={handlePaginationChange}
-        /> */}
+      <Pagination
+        className="pagination"
+        defaultCurrent={pagination.page}
+        total={pagination.totalResults}
+        hideOnSinglePage
+        onChange={handlePaginationChange}
+      />
     </div>
   );
 }

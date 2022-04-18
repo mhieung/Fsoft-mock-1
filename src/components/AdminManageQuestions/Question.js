@@ -1,110 +1,261 @@
 /** @format */
 
-import { Button, Input, Modal, Select, Table, Space, Col } from "antd";
-import React, { useState } from "react";
+import { Button, Input, Modal, Form, Space } from "antd";
+import React from "react";
 
-export const QuestionBox = (props) => {
-  const { idQuestion } = props;
-  console.log(idQuestion);
-  const [isVisible, setIsVisible] = useState(false);
-  const [isDisabled, setDisabled] = useState(false);
-  const [question, setQuestion] = useState({});
+export const CreateQuestion = (props) => {
+  const {
+    isVisible,
+    onCancel,
+    onOk,
+    handleClickedCreate,
+    handleCreateQuestion,
+  } = props;
+  return (
+    <div>
+      <Button type="primary" onClick={handleClickedCreate}>
+        Create Question
+      </Button>
 
-  const handleShow = () => {
-    // setQuestion(question);
-    setIsVisible(true);
-  };
-  const handleCancel = () => {
-    setIsVisible(false);
-  };
-  const handleOK = () => {
-    setIsVisible(false);
-    setDisabled(true);
-  };
+      <Modal visible={isVisible} onCancel={onCancel} onOk={onOk}>
+        <Space direction="vertical">
+          <Form
+            name="basic"
+            wrapperCol={{
+              span: 24,
+            }}
+            autoComplete="off"
+            onFinish={handleCreateQuestion}
+          >
+            <Form.Item
+              labelCol={12}
+              name="question"
+              rules={[
+                {
+                  required: true,
+                  message: "required!",
+                },
+              ]}
+            >
+              <Input addonBefore="Question" placeholder="Enter a question" />
+            </Form.Item>
 
-  const handleUpdateQuestion = () => {
-    setDisabled(false);
-  };
-  const { Option } = Select;
-  const selectBefore = (
-    <Select
-      defaultValue="question1"
-      className="select-before"
-      disabled={isDisabled}
-    >
-      <Option value="question1">question1</Option>
-      <Option value="question2">question2</Option>
-      <Option value="question3">question3</Option>
-      <Option value="question4">question4</Option>
-    </Select>
+            <Form.Item
+              name="answer1"
+              rules={[
+                {
+                  required: true,
+                  message: "required!",
+                },
+              ]}
+            >
+              <Input addonBefore="Answer 1" placeholder="Enter answer 1" />
+            </Form.Item>
+
+            <Form.Item
+              name="answer2"
+              rules={[
+                {
+                  required: true,
+                  message: "required!",
+                },
+              ]}
+            >
+              <Input addonBefore="Answer 2" placeholder="Enter answer 2" />
+            </Form.Item>
+
+            <Form.Item
+              name="answer3"
+              rules={[
+                {
+                  required: true,
+                  message: "required!",
+                },
+              ]}
+            >
+              <Input addonBefore="Answer 3" placeholder="Enter answer 3" />
+            </Form.Item>
+
+            <Form.Item
+              name="answer4"
+              rules={[
+                {
+                  required: true,
+                  message: "required!",
+                },
+              ]}
+            >
+              <Input addonBefore="Answer 4" placeholder="Enter answer 4" />
+            </Form.Item>
+
+            <Form.Item
+              name="correctanswer"
+              rules={[
+                {
+                  required: true,
+                  message: "required!",
+                },
+              ]}
+            >
+              <Input
+                addonBefore="Correct answer "
+                placeholder="Enter Correct answer"
+              />
+            </Form.Item>
+
+            <Form.Item wrapperCol={{ offset: 0, span: 16 }}>
+              <Button type="primary" htmlType="submit">
+                Save
+              </Button>
+            </Form.Item>
+          </Form>
+        </Space>
+      </Modal>
+    </div>
   );
-  const selectAfter = (answer) => {
-    const checkCorrect = () => {
-      if (question.correctanswer === answer) return "correct";
-      else return "incorrect";
-    };
-    return (
-      <Select defaultValue={checkCorrect()} className="select-after">
-        <Option value="incorrect">incorrect</Option>
-        <Option value="correct">correct</Option>
-      </Select>
-    );
-  };
+};
+export const UpdateQuestionById = (props) => {
+  const {
+    questionId,
+
+    questionById,
+    handleClickInspect,
+    isVisible,
+    onCancel,
+    onOk,
+    handleEditQuestion,
+  } = props;
 
   return (
     <div>
-      <Button onClick={handleShow}>Test</Button>
-      {/* <Button onClick={handleShow()}></Button> */}
-      <Modal visible={isVisible} onCancel={handleCancel} onOk={handleOK}>
+      <Button type="primary" onClick={(e) => handleClickInspect(questionId)}>
+        Edit
+      </Button>
+
+      <Modal visible={isVisible} onCancel={onCancel} onOk={onOk}>
         <Space direction="vertical">
-          <Input
-            addonBefore={selectBefore}
-            placeholder="Enter a question"
-            disabled={isDisabled}
-            value={question.question}
-          />
-          <Input
-            addonBefore="answer1"
-            addonAfter={selectAfter(question.answer1)}
-            placeholder="answer1"
-            disabled={isDisabled}
-            value={question.answer1}
-          />
-          <Input
-            addonBefore="answer2"
-            addonAfter={selectAfter(question.answer2)}
-            placeholder="answer2"
-            disabled={isDisabled}
-            value={question.answer2}
-          />
-          <Input
-            addonBefore="answer3"
-            addonAfter={selectAfter(question.answer3)}
-            placeholder="answer3"
-            disabled={isDisabled}
-            value={question.answer3}
-          />
-          <Input
-            addonBefore="answer4"
-            addonAfter={selectAfter(question.answer4)}
-            placeholder="answer4"
-            disabled={isDisabled}
-            value={question.answer4}
-          />
-          <div direction="horizontal">
-            <Button
-              type="primary"
-              onClick={handleUpdateQuestion}
-              style={{ margin: "1rem" }}
+          <Form
+            name="basic"
+            wrapperCol={{
+              span: 24,
+            }}
+            autoComplete="off"
+            onFinish={handleEditQuestion}
+          >
+            <Form.Item
+              labelCol={12}
+              name="question"
+              rules={[
+                {
+                  required: true,
+                  message: "required!",
+                },
+              ]}
             >
-              Update question
-            </Button>
-            <Button type="primary" style={{ backgroundColor: "red" }}>
-              Delete question
-            </Button>
-          </div>
+              <Input
+                addonBefore="Question"
+                // placeholder="Enter a question"
+
+                placeholder={questionById.question}
+              />
+            </Form.Item>
+
+            <Form.Item
+              name="answer1"
+              rules={[
+                {
+                  required: true,
+                  message: "required!",
+                },
+              ]}
+            >
+              <Input
+                addonBefore="Answer 1"
+                placeholder={questionById.answer1}
+              />
+            </Form.Item>
+
+            <Form.Item
+              name="answer2"
+              rules={[
+                {
+                  required: true,
+                  message: "required!",
+                },
+              ]}
+            >
+              <Input
+                addonBefore="Answer 2"
+                placeholder={questionById.answer2}
+              />
+            </Form.Item>
+
+            <Form.Item
+              name="answer3"
+              rules={[
+                {
+                  required: true,
+                  message: "required!",
+                },
+              ]}
+            >
+              <Input
+                addonBefore="Answer 3"
+                placeholder={questionById.answer3}
+              />
+            </Form.Item>
+
+            <Form.Item
+              name="answer4"
+              rules={[
+                {
+                  required: true,
+                  message: "required!",
+                },
+              ]}
+            >
+              <Input
+                addonBefore="Answer 4"
+                placeholder={questionById.answer4}
+              />
+            </Form.Item>
+
+            <Form.Item
+              name="correctanswer"
+              rules={[
+                {
+                  required: true,
+                  message: "required!",
+                },
+              ]}
+            >
+              <Input
+                addonBefore="Correct answer "
+                placeholder={questionById.correctanswer}
+              />
+            </Form.Item>
+
+            <Form.Item wrapperCol={{ offset: 0, span: 16 }}>
+              <Space direction="horizontal">
+                <Button type="primary" htmlType="submit">
+                  Save
+                </Button>
+              </Space>
+            </Form.Item>
+          </Form>
         </Space>
       </Modal>
+    </div>
+  );
+};
+
+export const DeleteQuestionById = (props) => {
+  const { handleDeleteQuestion, questionId } = props;
+  return (
+    <div>
+      <Button type="danger" onClick={(e) => handleDeleteQuestion(questionId)}>
+        Delete
+      </Button>
     </div>
   );
 };

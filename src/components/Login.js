@@ -35,7 +35,6 @@ const Login = () => {
       const response = await UserLogin(username, password);
       const tokens = response.tokens;
       const userInfo = response.user;
-      console.log(tokens);
       if (tokens) {
         localStorage.setItem("access", tokens.access.token);
         localStorage.setItem("access_expires", tokens.access.expires);
