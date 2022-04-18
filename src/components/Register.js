@@ -90,7 +90,7 @@ function Register() {
   };
 
   return (
-    <div>
+    <div className="login-container">
       <Row
         type="flex"
         justify="center"

@@ -8,7 +8,7 @@ import { createUser, getUsers, updateUser } from "../../services/user.service";
 import { GET_USER_FAIL, GET_USER_SUCCESS } from "../../actions/types";
 
 export default function UsersList() {
-  const { Column, ColumnGroup } = Table;
+  const { Column } = Table;
 
   const dispatch = useDispatch();
   const [usersList, setUsersList] = useState([]);
@@ -84,27 +84,27 @@ export default function UsersList() {
       console.log(error);
     }
   };
-  // change pagination
-  // useEffect((page) => {
-  //   const fetchUsersList = async () => {
-  //     const params = {
-  //       page: page,
-  //     };
-  //     try {
-  //       const response = await getUsers(params);
-  //       setPagination({
-  //         page: response.page,
-  //         limit: response.limit,
-  //         totalPage: response.totalPages,
-  //         totalResults: response.totalResults,
-  //       });
-  //       setUsersList(response.results);
-  //       fetchUsersList();
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   };
-  // });
+  // pagination
+  const handlePaginationChange = (pageNumber) => {
+    const fetchUsersList = async () => {
+      const params = {
+        page: pageNumber,
+      };
+      try {
+        const response = await getUsers(params);
+        setPagination({
+          page: response.page,
+          limit: response.limit,
+          totalPage: response.totalPages,
+          totalResults: response.totalResults,
+        });
+        setUsersList(response.results);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchUsersList();
+  };
   return (
     <div>
       <Space direction="horizontal">
@@ -112,10 +112,28 @@ export default function UsersList() {
           <h1>Add a new User</h1>
           <CreateUser handleAddUser={handleAddUser} />
         </Space>
-        <Table dataSource={usersList}>
+        <Table
+          dataSource={usersList}
+          pagination={{
+            defaultCurrent: 1,
+            total: pagination.totalResults,
+            onChange: handlePaginationChange,
+          }}
+        >
           <Column
             title="Avatar"
-            render={(record) => <img src="record.avatar" />}
+            render={(record) => (
+              <img
+                src={record.avatar}
+                style={{
+                  borderRadius: "50%",
+                  width: "50px",
+                  height: "50px",
+                  objectFit: "cover",
+                }}
+              />
+            )}
+            // dataIndex="avatar"
             key="avatar"
           />
           <Column title="Username" dataIndex="username" key="username" />
@@ -137,13 +155,6 @@ export default function UsersList() {
             key="id"
           />
         </Table>
-        {/* <Pagination
-        className="pagination"
-        defaultCurrent={pagination.page}
-        total={pagination.totalResults}
-        hideOnSinglePage
-        onChange={handlePaginationChange}
-      /> */}
       </Space>
     </div>
   );

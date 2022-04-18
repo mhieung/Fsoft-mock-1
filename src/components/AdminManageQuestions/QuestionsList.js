@@ -122,11 +122,11 @@ export default function QuestionsList(props) {
     }
   };
   // change page
-  const handlePaginationChange = (page) => {
-    const params = {
-      page: page,
-    };
+  const handlePaginationChange = (pageNumber) => {
     const fetchQuestionsList = async () => {
+      const params = {
+        page: pageNumber,
+      };
       try {
         const response = await adminGetQuestions(params);
         setPagination({
@@ -135,20 +135,14 @@ export default function QuestionsList(props) {
           totalPages: response.totalPages,
           totalResults: response.totalResults,
         });
-        dispatch({
-          type: GET_QUESTION_SUCCESS,
-          payload: response,
-        });
+        setQuestionsList(response.results);
       } catch (error) {
         console.log(error);
-        dispatch({
-          type: GET_QUESTION_FAIL,
-          payload: error,
-        });
       }
     };
     fetchQuestionsList();
   };
+  console.log(pagination);
   return (
     <div>
       <Space direction="horizontal">
@@ -157,7 +151,14 @@ export default function QuestionsList(props) {
           <CreateQuestion handleCreateQuestion={handleCreateQuestion} />
         </Space>
 
-        <Table dataSource={questionsList}>
+        <Table
+          dataSource={questionsList}
+          pagination={{
+            defaultCurrent: 1,
+            total: pagination.totalResults,
+            onChange: handlePaginationChange,
+          }}
+        >
           <Column title="Question" dataIndex="question" key="question" />
           <ColumnGroup title="Answers">
             <Column title="Answer 1" dataIndex="answer1" key="answer1" />
@@ -193,13 +194,6 @@ export default function QuestionsList(props) {
           />
         </Table>
       </Space>
-      <Pagination
-        className="pagination"
-        defaultCurrent={pagination.page}
-        total={pagination.totalResults}
-        hideOnSinglePage
-        onChange={handlePaginationChange}
-      />
     </div>
   );
 }

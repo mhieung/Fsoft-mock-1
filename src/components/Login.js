@@ -6,8 +6,7 @@ import { Form, Input, Button, Checkbox, Row } from "antd";
 import { useNavigate } from "react-router-dom";
 import { LOGIN_FAIL, LOGIN_SUCCESS } from "../actions/types";
 import { UserLogin } from "../services/auth.service";
-const background = "../asset/background";
-
+import "./Login.css";
 const Login = () => {
   // const message = useSelector((state) => state.auth.error);
   const navigate = useNavigate();
@@ -60,11 +59,7 @@ const Login = () => {
     }
   };
   return (
-    <div
-      style={{
-        backgroundImage: `url(${background})`,
-      }}
-    >
+    <div className="login-container">
       <Row
         type="flex"
         justify="center"

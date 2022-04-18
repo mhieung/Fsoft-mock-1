@@ -2,19 +2,22 @@
 import React, { useState } from "react";
 import { Layout, Menu, Button } from "antd";
 import QandA from "./UserQandA/QandA";
+import SurveyResult from "./UserQandA/Result";
 import { Link, useNavigate } from "react-router-dom";
-import { QuestionCircleOutlined } from "@ant-design/icons";
+import { QuestionCircleOutlined, SolutionOutlined } from "@ant-design/icons";
 import { useDispatch } from "react-redux";
 import { UserLogout } from "../services/auth.service";
 import { USER_LOGOUT } from "../constants/userConstants";
+
 function User() {
   const { Header, Sider } = Layout;
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const [content, setContent] = useState();
+
   const onclickQuestion = () => {
     setContent(<QandA />);
-    console.log(content);
   };
   const onClickLogOut = async (e) => {
     e.preventDefault();
@@ -59,13 +62,6 @@ function User() {
                 onClick={onclickQuestion}
               >
                 <Link to="/user/questions "> Questions</Link>
-              </Menu.Item>
-              <Menu.Item
-                key="2"
-                // icon={<QuestionCircleOutlined />}
-                // onClick={onClickQuestionsList}
-              >
-                <Link to="/user "> Results</Link>
               </Menu.Item>
             </Menu>
           </Sider>
